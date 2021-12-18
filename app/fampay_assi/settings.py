@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
-from celery.schedules import crontab
+from datetime import timedelta
 
 import app.tasks
 
@@ -138,8 +138,8 @@ CELERY_RESULT_BACKEND = "redis://redis:6379"
 
 # add cron tasks for celery
 CELERY_BEAT_SCHEDULE = {
-    "sample_task": {
-        "task": "app.tasks.sample_task",
-        "schedule": crontab(minute="*/1"),
+    "get_new_videos": {
+        "task": "app.tasks.get_new_videos",
+        "schedule": timedelta(seconds=30),
     },
 }
