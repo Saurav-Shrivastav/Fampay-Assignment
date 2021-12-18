@@ -8,6 +8,8 @@ class Video(models.Model):
     description = models.TextField()
     publishing_date = models.DateTimeField()
     thumbnail_url = models.URLField()
+    youtube_id = models.CharField(max_length=30, unique=True)
+    url = models.URLField()
 
     def __str__(self):
         return self.title
