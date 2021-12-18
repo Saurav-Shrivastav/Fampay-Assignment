@@ -1,6 +1,8 @@
 version: '3.8'
 
 services:
+  redis:
+    image: redis:6-alpine
   web:
     build: ./app
     command: gunicorn fampay_assi.wsgi:application --bind 0.0.0.0:8000
@@ -13,12 +15,29 @@ services:
       - ./.env.prod
     depends_on:
       - db
+      - redis
   db:
     image: postgres:13.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env.prod.db
+  celery:
+    build: ./app
+    command: celery -A fampay_assi worker -l info
+    env_file:
+      - .env.prod
+    depends_on:
+      - web
+      - redis
+  celery-beat:
+    build: ./app
+    command: celery -A fampay_assi beat -l info
+    env_file:
+      - .env.prod
+    depends_on:
+      - web
+      - redis
   nginx:
     build: ./nginx
     volumes:
