@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Video
+from app.models import Video, Channel
 
 
 class VideoAdmin(admin.ModelAdmin):
@@ -7,3 +7,4 @@ class VideoAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Video, VideoAdmin)
+admin.site.register(Channel)

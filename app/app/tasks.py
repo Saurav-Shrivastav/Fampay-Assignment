@@ -3,7 +3,7 @@ from celery.utils.log import get_task_logger
 from googleapiclient.discovery import build
 import os
 
-from app.models import Video
+from app.models import Video, Channel
 
 
 logger = get_task_logger(__name__)
@@ -25,7 +25,14 @@ def get_new_videos():
     count = 0
 
     for data in response['items']:
+        if not Channel.objects.filter(channel_id=data['snippet']['channelId']).exists():
+            Channel.objects.create(
+                channel_id=data['snippet']['channelId'],
+                channel_url="https://www.youtube.com/channel/" + data['snippet']['channelId'],
+                channel_title=data['snippet']['channelTitle'],
+            )
         if not Video.objects.filter(youtube_id=data['id']['videoId']).exists():
+            channel = Channel.objects.get(channel_id=data['snippet']['channelId'])
             Video.objects.create(
                 youtube_id=data['id']['videoId'],
                 title=data['snippet']['title'],
@@ -33,6 +40,8 @@ def get_new_videos():
                 publishing_date=data['snippet']['publishedAt'],
                 thumbnail_url=data['snippet']['thumbnails']['medium']['url'],
                 url="https://www.youtube.com/watch?v=" + data['id']['videoId'],
+                channel=channel,
+                live_broadcast=data['snippet']['liveBroadcastContent'],
             )
             count = count + 1
 
