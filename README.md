@@ -142,3 +142,6 @@ The **OpenAPI Specification** is available at <a href="https://localhost:1337/op
 }
 ```
 
+# License
+
+See [GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/)
