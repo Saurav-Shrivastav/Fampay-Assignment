@@ -14,6 +14,7 @@ youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEYS[0])
 
 
 def shift_api_key():
+    global key_val
     len_keys = len(YOUTUBE_API_KEYS)
 
     if len_keys == 1:
@@ -23,9 +24,9 @@ def shift_api_key():
     if key_val < len_keys - 1:
         key_val = key_val + 1
     elif key_val == len_keys - 1:
-        key_val = 0
+        youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEYS[0])
     
-    youtube = build('youtube', 'v3', developerKey=key_val)
+    youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEYS[key_val])
     logger.info("API KEY SHIFTED.")
     
 
@@ -43,8 +44,9 @@ def get_new_videos():
     try:
         response = request.execute()
     except HttpError as e:
-        logger.info(f'Error response status code : {e.status_code}, reason : {e.error_details}')
+        logger.info(f'Error response status code : {e.status_code}, reason : {e.error_details} {YOUTUBE_API_KEYS[key_val]}')
         shift_api_key()
+        return
     count = 0
 
     for data in response['items']:
