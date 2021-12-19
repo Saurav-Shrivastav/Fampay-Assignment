@@ -1,14 +1,33 @@
 from celery import shared_task
 from celery.utils.log import get_task_logger
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 import os
 
 from app.models import Video, Channel
 
 
 logger = get_task_logger(__name__)
-youtube = build('youtube', 'v3', developerKey=os.environ.get("YOUTUBE_API_KEY"))
+YOUTUBE_API_KEYS = os.environ.get("YOUTUBE_API_KEYS").split(" ")
+key_val = 0
+youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEYS[0])
 
+
+def shift_api_key():
+    len_keys = len(YOUTUBE_API_KEYS)
+
+    if len_keys == 1:
+        logger.info("Only 1 API key was supplied and it's quota is exhausted!!")
+        return
+    
+    if key_val < len_keys - 1:
+        key_val = key_val + 1
+    elif key_val == len_keys - 1:
+        key_val = 0
+    
+    youtube = build('youtube', 'v3', developerKey=key_val)
+    logger.info("API KEY SHIFTED.")
+    
 
 @shared_task
 def get_new_videos():
@@ -21,7 +40,11 @@ def get_new_videos():
         q="fampay",
         type="video",
     )
-    response = request.execute()
+    try:
+        response = request.execute()
+    except HttpError as e:
+        logger.info(f'Error response status code : {e.status_code}, reason : {e.error_details}')
+        shift_api_key()
     count = 0
 
     for data in response['items']:
