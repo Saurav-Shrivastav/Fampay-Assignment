@@ -1,0 +1,320 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Implementation for Fampay Assi",
+    "version": "",
+    "description": ""
+  },
+  "paths": {
+    "/api/videos/": {
+      "get": {
+        "operationId": "listVideos",
+        "description": "Get and list videos",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "publishing_date",
+            "required": false,
+            "in": "query",
+            "description": "publishing_date",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "live_broadcast",
+            "required": false,
+            "in": "query",
+            "description": "live_broadcast",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "upcoming",
+                "live",
+                "none"
+              ]
+            }
+          },
+          {
+            "name": "channel",
+            "required": false,
+            "in": "query",
+            "description": "channel",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ordering",
+            "required": false,
+            "in": "query",
+            "description": "Which field to use when ordering the results.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "A search term.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 123
+                    },
+                    "next": {
+                      "type": "string",
+                      "nullable": true,
+                      "format": "uri",
+                      "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                      "type": "string",
+                      "nullable": true,
+                      "format": "uri",
+                      "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/VideoList"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "api"
+        ]
+      }
+    },
+    "/api/videos/{id}/": {
+      "get": {
+        "operationId": "retrieveVideo",
+        "description": "Get and list videos",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "A UUID string identifying this video.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "publishing_date",
+            "required": false,
+            "in": "query",
+            "description": "publishing_date",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "live_broadcast",
+            "required": false,
+            "in": "query",
+            "description": "live_broadcast",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "upcoming",
+                "live",
+                "none"
+              ]
+            }
+          },
+          {
+            "name": "channel",
+            "required": false,
+            "in": "query",
+            "description": "channel",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ordering",
+            "required": false,
+            "in": "query",
+            "description": "Which field to use when ordering the results.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "A search term.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VideoDetail"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "api"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "VideoList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "publishing_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "thumbnail_url": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 200,
+            "pattern": "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)(?:\\.(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)){3}|\\[[0-9a-f:.]+\\]|([a-z¡-￿0-9](?:[a-z¡-￿0-9-]{0,61}[a-z¡-￿0-9])?(?:\\.(?!-)[a-z¡-￿0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z¡-￿-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\.?|localhost))(?::\\d{1,5})?(?:[/?#][^\\s]*)?\\z"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 200,
+            "pattern": "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)(?:\\.(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)){3}|\\[[0-9a-f:.]+\\]|([a-z¡-￿0-9](?:[a-z¡-￿0-9-]{0,61}[a-z¡-￿0-9])?(?:\\.(?!-)[a-z¡-￿0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z¡-￿-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\.?|localhost))(?::\\d{1,5})?(?:[/?#][^\\s]*)?\\z"
+          },
+          "live_broadcast": {
+            "enum": [
+              "upcoming",
+              "live",
+              "none"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "publishing_date",
+          "thumbnail_url",
+          "url",
+          "live_broadcast"
+        ]
+      },
+      "VideoDetail": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "description": {
+            "type": "string"
+          },
+          "publishing_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "thumbnail_url": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 200,
+            "pattern": "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)(?:\\.(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)){3}|\\[[0-9a-f:.]+\\]|([a-z¡-￿0-9](?:[a-z¡-￿0-9-]{0,61}[a-z¡-￿0-9])?(?:\\.(?!-)[a-z¡-￿0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z¡-￿-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\.?|localhost))(?::\\d{1,5})?(?:[/?#][^\\s]*)?\\z"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 200,
+            "pattern": "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)(?:\\.(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)){3}|\\[[0-9a-f:.]+\\]|([a-z¡-￿0-9](?:[a-z¡-￿0-9-]{0,61}[a-z¡-￿0-9])?(?:\\.(?!-)[a-z¡-￿0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z¡-￿-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\.?|localhost))(?::\\d{1,5})?(?:[/?#][^\\s]*)?\\z"
+          },
+          "live_broadcast": {
+            "enum": [
+              "upcoming",
+              "live",
+              "none"
+            ],
+            "type": "string"
+          },
+          "channel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "readOnly": true
+              },
+              "channel_url": {
+                "type": "string",
+                "format": "uri",
+                "maxLength": 200,
+                "pattern": "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)(?:\\.(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)){3}|\\[[0-9a-f:.]+\\]|([a-z¡-￿0-9](?:[a-z¡-￿0-9-]{0,61}[a-z¡-￿0-9])?(?:\\.(?!-)[a-z¡-￿0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z¡-￿-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\.?|localhost))(?::\\d{1,5})?(?:[/?#][^\\s]*)?\\z"
+              },
+              "channel_id": {
+                "type": "string",
+                "maxLength": 30
+              },
+              "channel_title": {
+                "type": "string",
+                "maxLength": 255
+              }
+            },
+            "required": [
+              "channel_url",
+              "channel_id",
+              "channel_title"
+            ],
+            "readOnly": true
+          }
+        },
+        "required": [
+          "title",
+          "description",
+          "publishing_date",
+          "thumbnail_url",
+          "url",
+          "live_broadcast"
+        ]
+      }
+    }
+  }
+}
