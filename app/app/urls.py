@@ -8,5 +8,5 @@ router.register("", views.VideoViewSet)
 
 
 urlpatterns = [
-    path("video/", include(router.urls)),
+    path("videos/", include(router.urls)),
 ]
