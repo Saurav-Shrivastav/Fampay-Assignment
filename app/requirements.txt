@@ -7,3 +7,5 @@ google-api-python-client==2.33.0
 djangorestframework==3.13.1
 django-filter==21.1
 Markdown==3.3.6
+PyYAML==6.0
+django-rest-swagger==2.2.0
