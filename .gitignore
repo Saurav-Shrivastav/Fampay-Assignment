@@ -5,6 +5,7 @@ media
 .DS_Store
 *.sqlite3
 .env
+.db.env
 .env.prod
 .env.prod.db
 .vscode/

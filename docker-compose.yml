@@ -12,7 +12,7 @@ services:
     expose:
       - 8000
     env_file:
-      - ./.env.prod
+      - ./.env
     depends_on:
       - db
       - redis
@@ -21,12 +21,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env.prod.db
+      - ./.db.env
   celery:
     build: ./app
     command: celery -A fampay_assi worker -l info
     env_file:
-      - .env.prod
+      - .env
     depends_on:
       - db
       - web
@@ -35,7 +35,7 @@ services:
     build: ./app
     command: celery -A fampay_assi beat -l info
     env_file:
-      - .env.prod
+      - .env
     depends_on:
       - db
       - web
