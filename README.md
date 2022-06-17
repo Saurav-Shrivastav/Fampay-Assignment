@@ -106,7 +106,7 @@ You can now access the docs at <a href="http://localhost:1337/docs">localhost:13
 The **Swagger Documentation** is available at <a href="https://localhost:1337/docs">`/docs/`</a> <br>
 The **OpenAPI Specification** is available at <a href="https://localhost:1337/openapi">`/openapi/`</a>
 
-- `/api/videos/`: Get and list videos. Sample Reponse:
+- `/api/videos/` ([localhost:1337/api/videos](http://localhost:1337/api/videos)):Get and list videos. Sample Reponse:
 ```json
 {
   "count": 123,
@@ -124,7 +124,7 @@ The **OpenAPI Specification** is available at <a href="https://localhost:1337/op
   ]
 }
 ```
-- `/api/videos/{id}/`: Get video details by id. Sample Response:
+- `/api/videos/{id}/` (Note: `id` is the `uuid` of the video): Get video details by id. Sample Response:
 ```json
 {
   "title": "string",
